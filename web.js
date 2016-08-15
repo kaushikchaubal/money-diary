@@ -2,7 +2,9 @@ var gzippo = require('gzippo');
 var express = require('express');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
 var app = express();
+
 
 // *******************************************
 // ******* Mongoose Schema definition ********
@@ -29,8 +31,13 @@ mongoose.connect(process.env.MONGOLAB_URI, function (error) {
 // *******************************************
 // ********* Serving Static Content  *********
 // *******************************************
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(gzippo.staticGzip("" + __dirname));
+
 
 
 // *******************************************
@@ -50,9 +57,9 @@ app.get('/diary/entries/:email', function (req, res) {
 
 app.post('/diary/entry/new', function (req, res) {
 	console.log('Request received to save DiaryEntry');
-    var entry = new DiaryEntry(req.body);
-    entry.email = "kaushikchaubal@gmail.com";
-    entry.weeklyAllowance = 100;
+    var entry = new DiaryEntry();
+    entry.email = req.body.email;
+    entry.weeklyAllowance = req.body.weeklyAllowance;
     entry.save(function (err) {
     	console.log('Saved successfully')
 		res.json(200, entry);
