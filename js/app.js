@@ -3,17 +3,27 @@
 // *******************************************
 function onSignIn(googleUser) {
 	var profile = googleUser.getBasicProfile();
-	console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-	console.log('Name: ' + profile.getName());
-	console.log('Image URL: ' + profile.getImageUrl());
+	$('#status').html('Thank you for signing in ' + profile.getName());
+
 	console.log('Email: ' + profile.getEmail());
-	document.getElementById('google-status').innerHTML = "Welcome " + profile.getName();
+	$.get( "/diary/entries/" + profile.getEmail(), function(data) {
+  		console.log(JSON.stringify(data));
+  		$('#money-data').dataTable({
+	        "bProcessing": true,
+	        "aaData": data,
+	        "aoColumns": [
+	            { "mData": "email" }, 
+	            { "mData": "weeklyAllowance" }
+	        ]
+  		});
+	});
 }
 
-function signOutFromGoogle() {
+function signOut() {
 	var auth2 = gapi.auth2.getAuthInstance();
 	auth2.signOut().then(function () {
 		console.log('User signed out.');
-		document.getElementById('google-status').innerHTML = 'Logged out successfully';
+		$('#status').html('Logged out - See you soon!');
+		$('#money-data').parents('div.dataTables_wrapper').first().hide(); //TODO: this needs to be done in a better way!
 	});
 }

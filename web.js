@@ -36,12 +36,19 @@ app.use(gzippo.staticGzip("" + __dirname));
 // *******************************************
 // *************** REST APIs *****************
 // *******************************************
-app.get('/diary', function (req, res) {
+app.get('/test', function (req, res) {
 	console.log('Received something');
     res.status(200).json({msg: 'OK'});
   });
 
-app.post('/diary/entry', function (req, res) {
+app.get('/diary/entries/:email', function (req, res) {
+	console.log('Looking up for ' + req.params.email);
+    DiaryEntry.find({ 'email': req.params.email}, function (err, entries){
+      res.status(200).json(entries);
+    });
+  });	
+
+app.post('/diary/entry/new', function (req, res) {
 	console.log('Request received to save DiaryEntry');
     var entry = new DiaryEntry(req.body);
     entry.email = "kaushikchaubal@gmail.com";
