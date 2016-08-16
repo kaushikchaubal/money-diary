@@ -1,3 +1,3 @@
 1. Correct Schema
-2. Editable tables
-3. Pretty CSS
+2. Pretty CSS
+3. Editing table triggers DB change

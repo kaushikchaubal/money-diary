@@ -11,7 +11,7 @@ function onSignIn(googleUser) {
 	console.log('Email: ' + sesionEmail);
 	$.get( "/diary/entries/" + sesionEmail, function(data) {
   		console.log(JSON.stringify(data));
-  		moneyDataTable = $('#money-data').dataTable({
+  		moneyDataTable = $('#money-data').DataTable({
 	        "bProcessing": true,
 	        "aaData": data,
 	        "aoColumns": [
@@ -19,6 +19,10 @@ function onSignIn(googleUser) {
 	            { "mData": "weeklyAllowance" }
 	        ]
   		});
+
+  		moneyDataTable.MakeCellsEditable({
+        "onUpdate": updateRecord
+    });
 	});
 }
 
@@ -43,4 +47,10 @@ function add() {
         }, function( data ) {
 		$( ".result" ).html( data );
 	});
+}
+
+function updateRecord(updatedCell, updatedRow, oldValue) {
+    console.log("The new value for the cell is: " + updatedCell.data());
+    console.log("The old value for that cell was: " + oldValue);
+    console.log("The values for each cell in that row are: " + updatedRow.data());
 }
