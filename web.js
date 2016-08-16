@@ -62,7 +62,7 @@ app.post('/diary/entry/new', function (req, res) {
     entry.weeklyAllowance = req.body.weeklyAllowance;
     entry.save(function (err) {
     	console.log('Saved successfully')
-		res.json(200, entry);
+		res.status(200).json(entry);
     });
   });
 
