@@ -10,8 +10,11 @@ var app = express();
 // ******* Mongoose Schema definition ********
 // *******************************************
 var Schema = new mongoose.Schema({
-  email 			: String,
-  weeklyAllowance	: Number
+	email 		: String,
+	startOfWeek : String,
+	spent 		: Number, 
+	allowance 	: Number, 
+	saved 		: Number
 });
 
 DiaryEntry = mongoose.model('DiaryEntry', Schema);
@@ -56,10 +59,13 @@ app.get('/diary/entries/:email', function (req, res) {
   });	
 
 app.post('/diary/entry/new', function (req, res) {
-	console.log('Request received to save DiaryEntry');
+	console.log('Adding new entry for ' + req.body.startOfWeek);
     var entry = new DiaryEntry();
     entry.email = req.body.email;
-    entry.weeklyAllowance = req.body.weeklyAllowance;
+    entry.startOfWeek = req.body.startOfWeek;
+    entry.spent = req.body.spent;
+    entry.allowance = req.body.allowance;
+    entry.saved = req.body.saved;
     entry.save(function (err) {
     	console.log('Saved successfully')
 		res.status(200).json(entry);

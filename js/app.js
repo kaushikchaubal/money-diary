@@ -15,8 +15,10 @@ function onSignIn(googleUser) {
 	        "bProcessing": true,
 	        "aaData": data,
 	        "aoColumns": [
-	            { "mData": "email" }, 
-	            { "mData": "weeklyAllowance" }
+	            { "mData": "startOfWeek" },
+	            { "mData": "spent" },
+	            { "mData": "allowance" },
+	            { "mData": "saved" }
 	        ]
   		});
 
@@ -37,13 +39,19 @@ function signOut() {
 	});
 }
 
-function add() {
-	var weeklyAllowance = $('.weeklyAllowance').val();
-	console.log('Adding...' + weeklyAllowance);
+function addEntry() {
+	var startOfWeek = $('.startOfWeek').val();
+	var spent = $('.spent').val();
+	var allowance = $('.allowance').val();
+	var saved = allowance - spent;
+	console.log('Adding new entry for ' + startOfWeek);
 	$.post( "/diary/entry/new",
         {
           email: sesionEmail,
-          weeklyAllowance: weeklyAllowance
+          startOfWeek: startOfWeek,
+          spent: spent,
+          allowance: allowance,
+          saved: saved
         }, function( data ) {
 		$( ".result" ).html( data );
 	});
@@ -52,5 +60,5 @@ function add() {
 function updateRecord(updatedCell, updatedRow, oldValue) {
     console.log("The new value for the cell is: " + updatedCell.data());
     console.log("The old value for that cell was: " + oldValue);
-    console.log("The values for each cell in that row are: " + updatedRow.data());
+    console.log("The values for each cell in that row are: " + JSON.stringify(updatedRow.data()));
 }
