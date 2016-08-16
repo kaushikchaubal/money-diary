@@ -32,8 +32,8 @@ function signOut() {
 		console.log('User signed out.');
 		sesionEmail = null;
 		$('#status').html('Logged out - See you soon!');
-		moneyDataTable.fnDestroy();
-		$('money-data').empty();
+		moneyDataTable.destroy();
+		$('#money-data').empty();
 	});
 }
 
