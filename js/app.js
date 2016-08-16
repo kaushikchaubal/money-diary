@@ -1,4 +1,5 @@
 var sesionEmail;
+var moneyDataTable;
 // *******************************************
 // ********* GOOGLE SIGN-IN METHODS **********
 // *******************************************
@@ -10,7 +11,7 @@ function onSignIn(googleUser) {
 	console.log('Email: ' + sesionEmail);
 	$.get( "/diary/entries/" + sesionEmail, function(data) {
   		console.log(JSON.stringify(data));
-  		$('#money-data').dataTable({
+  		moneyDataTable = $('#money-data').dataTable({
 	        "bProcessing": true,
 	        "aaData": data,
 	        "aoColumns": [
@@ -27,7 +28,8 @@ function signOut() {
 		console.log('User signed out.');
 		sesionEmail = null;
 		$('#status').html('Logged out - See you soon!');
-		$('#money-data').parents('div.dataTables_wrapper').first().hide(); //TODO: this needs to be done in a better way!
+		moneyDataTable.fnDestroy();
+		$('money-data').empty();
 	});
 }
 
